@@ -1,7 +1,9 @@
 require('dotenv').config()
 const people = require('./seed.json')
-let Bot = require('slackbots');
-const grouping = require('./randomGrouping')
+const arrayHandler = require('./randomGrouping')
+const Bot = require('slackbots');
+const User = require('./models/UserModel')
+
 
 // create a bot
 let settings = {
@@ -16,7 +18,6 @@ bot.on('start', function() {
     
     bot.included = [];
     people.map(e => bot.included.push(e.userID))
-    //let groups = bot.included;
     bot.previousLeaders = [];
     
     //bot.postMessageToChannel('general', 'Yall wann hotwings???!!');
@@ -57,28 +58,28 @@ bot.on('message', data => {
              bot.postMessage(channel, `<@${user}> was i mentioned?`)
         }
 
+        //call 11pm
         if (message.includes(' show groups')) {
+            //send random array to DB
+            const newMongoGroups = new User (
+                {userID: bot.included}
+                )
+            newMongoGroups.save()
+                .then(() => console.log('saved'))
+                .catch((e) => {console.log(e)})
 
-            console.log(bot.included, '1');
-
+            //forms groups
             let groups = bot.included.map(e => e)
-            console.log(groups, '2');
-            
-            let orderedGroups = grouping(groups)
-            
-            console.log(orderedGroups, '3');
-            
-            console.log(groups, '4');
-            console.log(bot.included, '5');
-            
-            
+            let orderedGroups = arrayHandler(groups)
+            //select Leaders
+
+
+            //display groups and leaders
             orderedGroups.forEach((e,i) => 
                bot.postMessage(channel, `Group ${i+1} is ${e}`)
             )
-            
-            
-            console.log(bot.included, '6');
-            
+
+
         }
     }
    
