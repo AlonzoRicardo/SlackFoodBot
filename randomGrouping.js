@@ -63,28 +63,24 @@ function checkIfArrayFullOfLeaders(groupsArr, leaderArr) {
   return result
 }
 
-function arrayHandler(includedPeople) {
+function arrayHandler(includedPeople, leaders) {
   let resultArray;
-  
   let result = true;
-  let i = 0
+
   while (result === true) {
     let _includedPeople = [...includedPeople];
-    let testArray = includedPeople.map(e => e)
-    let leaders = testArray.splice(0, 17);
+
+    //must be replaced below
+    /* let testArray = includedPeople.map(e => e)
+    let leaders = testArray.splice(0, 17); */
+    //must be replaced above
+
     let normalizedGroups = grouping(_includedPeople)
     result = checkIfArrayFullOfLeaders(normalizedGroups, leaders)
     resultArray = [...normalizedGroups]
-    i++
+
   }
   return resultArray
 }
-
-/* function selectLeaderFromArray(index, arr) {
-  return arr[index][Math.floor(Math.random() * arr[index].length)]
-} */
-
-
-
 
 module.exports = arrayHandler

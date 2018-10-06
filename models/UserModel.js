@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const Schema   = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 mongoose
-  .connect(process.env.DBURL, {useNewUrlParser: true})
+  .connect(process.env.DBURL, { useNewUrlParser: true })
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -12,14 +12,14 @@ mongoose
 
 
 const userSchema = new Schema({
-  userID: Array
+  userID: []
 }, {
-  timestamps: {
-    createdAt: "created_at",
-    updatedAt: "updated_at"
-  }
-})
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: "updated_at"
+    }
+  })
 
 const User = mongoose.model("User", userSchema);
 
-module.exports= User;
+module.exports = User;
