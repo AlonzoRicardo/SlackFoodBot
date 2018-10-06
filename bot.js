@@ -1,6 +1,6 @@
 require('dotenv').config()
-const people = require('./seed.json')
-const arrayHandler = require('./randomGrouping')
+
+const formGroups = require('./randomGrouping')
 const Bot = require('slackbots');
 const User = require('./models/UserModel')
 const Leader = require('./models/LeaderModel')
@@ -10,6 +10,7 @@ const selectLeaderFromArrays = require('./leaderSelector')
 const leadersArray = new Leader(
     { wereLeaders: [] }
 )
+
 leadersArray.save()
     .then(() => console.log('leadersArraySaved'))
     .catch((e) => console.log(e))
@@ -25,15 +26,13 @@ let bot = new Bot(settings);
 bot.on('start', function () {
 
     bot.included = [];
-    //people.map(e => bot.included.push(e.userID))
     bot.previousLeaders = [];
 
-    //bot.postMessageToChannel('general', 'Yall wann hotwings???!!');
+    bot.postMessageToChannel('general', 'Yall wann hotwings???!!');
 });
 
 // Messages
 bot.on('message', data => {
-
     if (data.type !== 'message') {
         return
     }
@@ -84,7 +83,7 @@ function messageHandler(message, user, channel) {
                 }).then(() => {
                     //forms groups
                     let groups = bot.included.map(e => e)
-                    orderedGroups = arrayHandler(groups, wereLeaders)
+                    orderedGroups = formGroups(groups, wereLeaders)
                 }).then(() => {
                     //select Leaders
                     newLeaders = selectLeaderFromArrays(orderedGroups, wereLeaders)
@@ -97,11 +96,9 @@ function messageHandler(message, user, channel) {
                     .then(() => {
                         //prints groups and leaders to slack
                         let message = `Leaders are `;
-
                         newLeaders.map(e => {
                             message += `<@${e}> `
                         })
-
                         orderedGroups.map((e, i) => {
                             message += `\n Group ${i + 1} is `
                             e.map(e => {

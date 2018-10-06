@@ -5,10 +5,7 @@ function grouping(arr) {
   })
 
   let copyArr = arr.map(e => e)
-
-  max = 7
-  min = 4
-  groupSize = 7;
+  let groupSize = 7;
   let newArr = []
 
   while (!Number.isInteger((arr.length / groupSize))) {
@@ -51,8 +48,6 @@ function grouping(arr) {
 }
 
 function checkIfArrayFullOfLeaders(groupsArr, leaderArr) {
-  let count = 0;
-  let finalArr = [...groupsArr].join().split(',')
   let result = false;
   for (var i = 0; i < groupsArr.length; i++) {
     let isFull = groupsArr[i].every((e) => leaderArr.includes(e))
@@ -63,24 +58,16 @@ function checkIfArrayFullOfLeaders(groupsArr, leaderArr) {
   return result
 }
 
-function arrayHandler(includedPeople, leaders) {
+function formGroups(includedPeople, leaders) {
   let resultArray;
   let result = true;
-
   while (result === true) {
     let _includedPeople = [...includedPeople];
-
-    //must be replaced below
-    /* let testArray = includedPeople.map(e => e)
-    let leaders = testArray.splice(0, 17); */
-    //must be replaced above
-
     let normalizedGroups = grouping(_includedPeople)
     result = checkIfArrayFullOfLeaders(normalizedGroups, leaders)
     resultArray = [...normalizedGroups]
-
   }
   return resultArray
 }
 
-module.exports = arrayHandler
+module.exports = formGroups
