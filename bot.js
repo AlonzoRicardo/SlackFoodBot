@@ -25,7 +25,7 @@ let bot = new Bot(settings);
 bot.on('start', function () {
 
     bot.included = [];
-    people.map(e => bot.included.push(e.userID))
+    //people.map(e => bot.included.push(e.userID))
     bot.previousLeaders = [];
 
     //bot.postMessageToChannel('general', 'Yall wann hotwings???!!');
@@ -37,20 +37,19 @@ bot.on('message', data => {
     if (data.type !== 'message') {
         return
     }
-
+    console.log(data)
     messageHandler(data.text, data.user, data.channel)
 })
 
 function messageHandler(message, user, channel) {
 
     if (message.includes(' include me')) {
-        if (bot.included.indexOf(`${user}`) !== -1) {
+        if (!bot.included.indexOf(`${user}`) !== -1) {
+            bot.included.push(user)
+            bot.postMessage(channel, `<@${user}> Mah NIG, Welcome to the gang! ${bot.included}`)
+        } else {
             console.log(bot.included);
             bot.postMessage(channel, `<@${user}> Mah NIG, u already a homie! ${bot.included}`)
-        } else {
-            bot.included.push(user)
-
-            bot.postMessage(channel, `<@${user}> Mah NIG, Welcome to the gang! ${bot.included}`)
         }
     }
 
@@ -90,16 +89,27 @@ function messageHandler(message, user, channel) {
                     //select Leaders
                     newLeaders = selectLeaderFromArrays(orderedGroups, wereLeaders)
                 })
-                .then(() => {
-                    Leader.updateOne({'wereLeaders': wereLeaders}, {$set: {'wereLeaders': newLeaders}})
-                    .then(e => console.log(e))
-                })
-                .then(() => {
-                    //prints groups and leaders to slack
-                    orderedGroups.forEach((e, i) =>
-                        bot.postMessage(channel, `Group ${i + 1} is ${e}`)
-                    )
-                })
+                    .then(() => {
+                        //updates the leaders array
+                        Leader.updateOne({ 'wereLeaders': wereLeaders }, { $set: { 'wereLeaders': newLeaders } })
+                            .then(e => console.log(e))
+                    })
+                    .then(() => {
+                        //prints groups and leaders to slack
+                        let message = `Leaders are `;
+
+                        newLeaders.map(e => {
+                            message += `<@${e}> `
+                        })
+
+                        orderedGroups.map((e, i) => {
+                            message += `\n Group ${i + 1} is `
+                            e.map(e => {
+                                message += `<@${e}>`
+                            })
+                        })
+                        bot.postMessage(channel, message)
+                    })
             })
             .catch(e => console.log(e))
 
