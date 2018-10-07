@@ -1,13 +1,12 @@
 const assert = require('chai').assert;
 const formGroups = require('../randomGrouping')
-const testPeople = require('../seed.json')
+const testPeople = require('../config/seed.json')
 
 //Testing seeds
 const testArray = [];
 testPeople.map(e => testArray.push(e.userID))
 const testArrayLeaders = [...testArray].splice(0, 12)
 let result = formGroups(testArray, testArrayLeaders)
-console.log(result);
 
 describe('formGroups Function', () => {
     it('should return an array', () => {

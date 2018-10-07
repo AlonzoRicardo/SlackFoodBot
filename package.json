@@ -11,6 +11,7 @@
   "dependencies": {
     "dotenv": "^6.0.0",
     "mongoose": "^5.3.1",
+    "ontime": "0.0.6",
     "slackbots": "^1.1.0"
   },
   "devDependencies": {
