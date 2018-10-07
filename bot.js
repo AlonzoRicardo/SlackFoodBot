@@ -28,7 +28,7 @@ bot.login()
 
 //Start Time of the bot
 ontime({
-    cycle: ['14:04:00', '14:06:00']
+    cycle: ['10:00:00']
 }, function (ot) {
     bot._events = bot.evs;
     bot.emit('start')
@@ -38,7 +38,7 @@ ontime({
 
 //Cloing time of the bot
 ontime({
-    cycle: ['14:05:00', '14:07:00']
+    cycle: ['12:00:00']
 }, function (ot) {
     bot.emit('send groups')
     bot._events = {};
